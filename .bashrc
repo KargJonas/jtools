@@ -8,9 +8,13 @@
 
 # Jonn 2021
 
+# Dependencies:
+# git, wget
+
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
 
+# Fetches and runs .git-prompt if git installed but .git-prompt not found.
 function git_setup () {
   git --version &> /dev/null
   if [ $? -ne 0 ]; then return; fi
@@ -18,14 +22,27 @@ function git_setup () {
   # Download git-prompt if not found.
   if ! [ -f ~/.git-prompt.sh ]; then
     info 'File ".git-prompt.sh" not found. Fetching it.'
-    curl https://raw.githubusercontent.com/git/git/master/contrib/completion/git-prompt.sh -o ~/.git-prompt.sh
+    wget https://raw.githubusercontent.com/git/git/master/contrib/completion/git-prompt.sh -O ~/.git-prompt.sh
   fi
 
   # Run .git-prompt. This makes the __git_ps1 function available.
   source ~/.git-prompt.sh
 }
 
+# Automatically sets up sys manager if not found.
+function sys_setup () {
+  if [ -d ~/.sys/ ] && [ -f ~/.sys/sys.sh ]; then return; fi
+
+  info 'File "sys.sh" not found. Fetching it.'
+
+  local SYS_URL='https://raw.githubusercontent.com/KargJonas/jtools/master/.sys/sys.sh'
+
+  mkdir ~/.sys
+  wget $SYS_URL -O ~/.sys/sys.sh
+}
+
 git_setup
+sys_setup
 
 # Getting distro info
 DISTRO_NAME=$(cat /etc/*-release | grep 'NAME')
@@ -78,7 +95,7 @@ alias chx='sudo chmod +x'
 alias gco='git checkout'
 alias gpo='git push origin'
 
-# alias sys='~/bin/system-management/main.sh'
+alias sys='bash ~/.sys/sys.sh'
 alias edc='enter_docker_container'
 
 # Distro specific aliases
