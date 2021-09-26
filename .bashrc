@@ -62,12 +62,12 @@ function enter_docker_container () {
 
 # Checks if inside container and returns docker indicator for PS1
 function __docker_ps1 () {
-  if [ -f /.dockerenv ]; then echo -e '\033[01;32m[\033[01;35mdocker\033[01;32m]'; fi
+  if [ -f /.dockerenv ]; then echo -e '\033[01;32m[\033[01;36mdocker\033[01;32m] '; fi
 }
 
 # Checks if user is root and returns root indicator for PS1
 function __root_ps1 () {
-  if [[ $(id -u) == 0 ]]; then echo -e '\033[01;32m[\033[01;35mroot\033[01;32m] '; fi
+  if [[ $(id -u) == 0 ]]; then echo -e '\033[01;32m[\033[01;35mroot\033[01;32m]'; fi
 }
 
 function __safe_git_ps1 () {
@@ -80,7 +80,7 @@ function __safe_git_ps1 () {
 # This is where the PS1 is stitched together.
 # The completed string undergoes further decoding by the shell program
 # before being displayed (e.g. \w escape character)
-PS1='$(__docker_ps1)$(__root_ps1)\[\033[01;32m\][\[\033[01;34m\]\w\[\033[01;32m\]]\[\033[01;33m\] $(__safe_git_ps1)\n \[\033[01;31m\]⇋\[\033[00m\] '
+PS1='$(__root_ps1)$(__docker_ps1)\[\033[01;32m\][\[\033[01;34m\]\w\[\033[01;32m\]]\[\033[01;33m\] $(__safe_git_ps1)\n \[\033[01;31m\]⇋\[\033[00m\] '
 
 # Aliases
 alias ls='ls --color=auto'
